@@ -4,7 +4,28 @@
 
 {% block extra_css %}
 <style>
-    /* Mimic the mockup Layout Grid */
+    /* Premium Header */
+    .dashboard-header {
+        margin-bottom: 32px;
+    }
+    
+    .dashboard-header h2 {
+        font-weight: 800;
+        font-size: 2.2rem;
+        margin-bottom: 6px;
+        letter-spacing: -0.03em;
+        background: linear-gradient(to right, #ffffff, #a8b7ca);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dashboard-header p {
+        color: var(--text-soft); 
+        font-size: 0.95rem; 
+        margin: 0;
+    }
+
+    /* Layout Grid */
     .dashboard-grid {
         display: grid;
         grid-template-columns: 1.8fr 1fr;
@@ -24,94 +45,117 @@
         gap: 32px;
     }
 
-    /* Card Styling */
-    .mock-card {
+    /* Premium Dashboard Cards */
+    .dash-card {
         background: var(--panel);
         border: 1px solid var(--panel-border);
         border-radius: 20px;
         padding: 28px;
-        box-shadow: var(--shadow);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         backdrop-filter: blur(16px);
         display: flex;
         flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .dash-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
 
-    .card-header-flex {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
+    /* Highlighted Stat Cards */
+    .stat-card {
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    }
+    
+    .stat-card.course-stat::before {
+        background: linear-gradient(90deg, #f59e0b, #ef4444);
     }
 
-    .card-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-main);
-        margin: 0;
-    }
-
-    .card-subtitle {
-        font-size: 0.85rem;
-        color: var(--text-soft);
-        margin-top: 4px;
-    }
-
-    /* Small Stat Cards */
     .stat-icon-wrapper {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.05);
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
-        color: var(--text-soft);
-        margin-bottom: 16px;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
+    
+    .icon-blue { color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.2); }
+    .icon-orange { color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.2); }
 
     .stat-label {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         color: var(--text-soft);
         margin-bottom: 8px;
+        font-weight: 500;
     }
 
     .stat-value {
-        font-size: 2.2rem;
+        font-size: 2.8rem;
         font-weight: 800;
-        color: var(--text-main);
+        color: #fff;
         line-height: 1;
-        margin-bottom: 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
 
     .trend-badge {
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 4px 10px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 6px 12px;
         border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
     }
 
-    .trend-up {
-        background: rgba(34, 197, 94, 0.15);
-        color: #86efac;
+    .trend-up { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .trend-down { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .card-header-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
     }
 
-    .trend-down {
-        background: rgba(239, 68, 68, 0.15);
-        color: #fca5a5;
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #fff;
+        margin: 0;
+        letter-spacing: 0.02em;
+    }
+
+    .card-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-soft);
+        margin-top: 6px;
     }
 
     /* Target Gauge Chart inner */
     .gauge-wrapper {
         position: relative;
-        height: 200px;
+        height: 220px;
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        margin-top: 10px;
     }
 
     .gauge-text {
@@ -119,19 +163,20 @@
         bottom: 10px;
         text-align: center;
     }
-
     .gauge-text h2 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 800;
         margin: 0;
-        color: var(--text-main);
+        color: #fff;
     }
-
     .gauge-text p {
         color: #86efac;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 0.9rem;
         margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 4px;
     }
 
     .target-metrics {
@@ -139,85 +184,82 @@
         justify-content: space-between;
         text-align: center;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-top: 15px;
+        padding-top: 24px;
         margin-top: auto;
     }
 
-    .metric span {
-        display: block;
-        font-size: 0.85rem;
-        color: var(--text-soft);
-        margin-bottom: 4px;
-    }
-
-    .metric strong {
-        font-size: 1.1rem;
-        color: var(--text-main);
-        font-weight: 700;
-    }
+    .metric span { display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;}
+    .metric strong { font-size: 1.3rem; color: #fff; font-weight: 800; }
 
     /* Chart Containers */
-    .bar-chart-container {
-        height: 240px;
-        position: relative;
-    }
-
-    .area-chart-container {
-        height: 260px;
-        position: relative;
-    }
+    .bar-chart-container { height: 260px; position: relative; }
+    .area-chart-container { height: 300px; position: relative; }
 
     @media (max-width: 1200px) {
-        .dashboard-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            /* Force gap when stacked */
-        }
-
-        .left-col {
-            margin-bottom: 0;
-        }
+        .dashboard-grid { display: flex; flex-direction: column; gap: 32px; }
+        .left-col { margin-bottom: 0; }
     }
-
     @media (max-width: 768px) {
-        .top-stats {
-            grid-template-columns: 1fr;
-        }
+        .top-stats { grid-template-columns: 1fr; }
     }
+    
+    .btn-outline-custom {
+        background: transparent; 
+        border: 1px solid rgba(255,255,255,0.15); 
+        color: #fff; 
+        padding: 8px 16px; 
+        border-radius: 10px; 
+        font-weight: 600; 
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+    .btn-outline-custom:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+    .btn-outline-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-grid">
+<!-- Page Header -->
+<div class="dashboard-header">
+    <div>
+        <h2>System Overview</h2>
+        <p>Your facility's live statistics and visitor traffic analytics.</p>
+    </div>
+</div>
 
+<div class="dashboard-grid">
     <!-- LEFT COLUMN -->
     <div class="left-col">
         <!-- Top Stats Row -->
         <div class="top-stats">
-            <div class="mock-card">
-                <div class="stat-icon-wrapper"><i class="bi bi-people-fill"></i></div>
-                <div class="stat-label">Total Visitors</div>
+            <div class="dash-card stat-card">
+                <div class="stat-icon-wrapper icon-blue"><i class="bi bi-people-fill"></i></div>
+                <div class="stat-label">Total Registered Visitors</div>
                 <div class="stat-value">
                     {{ total }}
-                    <span class="trend-badge trend-up"><i class="bi bi-arrow-up"></i> 11.01%</span>
+                    <span class="trend-badge trend-up"><i class="bi bi-arrow-up-short" style="font-size: 1.2rem; margin-right:-4px;"></i> 11.0%</span>
                 </div>
             </div>
-            <div class="mock-card">
-                <div class="stat-icon-wrapper"><i class="bi bi-box-seam-fill"></i></div>
-                <div class="stat-label">Courses Active</div>
+            
+            <div class="dash-card stat-card course-stat">
+                <div class="stat-icon-wrapper icon-orange"><i class="bi bi-journal-bookmark-fill"></i></div>
+                <div class="stat-label">Active Targeted Courses</div>
                 <div class="stat-value">
                     {{ course_stats | length }}
-                    <span class="trend-badge trend-down"><i class="bi bi-arrow-down"></i> 2.05%</span>
+                    <span class="trend-badge trend-down"><i class="bi bi-arrow-down-short" style="font-size: 1.2rem; margin-right:-4px;"></i> 2.1%</span>
                 </div>
             </div>
         </div>
 
         <!-- Bar Chart Card (Monthly Sales replica) -->
-        <div class="mock-card">
+        <div class="dash-card">
             <div class="card-header-flex">
-                <h3 class="card-title">Visitors by Course</h3>
-                <i class="bi bi-three-dots-vertical" style="color:var(--text-soft)"></i>
+                <div>
+                    <h3 class="card-title">Visitors by Course</h3>
+                    <p class="card-subtitle">Distribution across departments</p>
+                </div>
+                <button class="btn btn-outline-custom border-0"><i class="bi bi-three-dots"></i></button>
             </div>
             <div class="bar-chart-container">
                 <canvas id="barChart"></canvas>
@@ -225,14 +267,14 @@
         </div>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="mock-card" style="margin-top: 30px;">
+    <!-- RIGHT COLUMN: Gauge Chart -->
+    <div class="dash-card">
         <div class="card-header-flex">
             <div>
                 <h3 class="card-title">Monthly Target</h3>
-                <p class="card-subtitle">Target you've set for each month</p>
+                <p class="card-subtitle">Visitor acquisition goal</p>
             </div>
-            <i class="bi bi-three-dots-vertical" style="color:var(--text-soft)"></i>
+            <button class="btn btn-outline-custom border-0"><i class="bi bi-three-dots"></i></button>
         </div>
 
         <div class="gauge-wrapper">
@@ -242,19 +284,18 @@
                 {% if gauge_stats and gauge_stats.target > 0 %}
                 {% set percentage = ((gauge_stats.monthly / gauge_stats.target) * 100) %}
                 {% endif %}
-                <h2>{{ "%.2f"|format(percentage) }}%</h2>
+                <h2>{{ "%.1f"|format(percentage) }}%</h2>
                 <p>Target Progress</p>
             </div>
         </div>
 
-        <p
-            style="text-align: center; color: var(--text-soft); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px;">
-            You had {{ gauge_stats.today if gauge_stats else 0 }} visitors today. Keep up your good work!
+        <p style="text-align: center; color: var(--text-soft); font-size: 1rem; line-height: 1.6; margin-bottom: 30px;">
+            You recorded <strong class="text-white">{{ gauge_stats.today if gauge_stats else 0 }} visitors</strong> today.<br> Keep pushing for your monthly target!
         </p>
 
         <div class="target-metrics">
             <div class="metric">
-                <span>Target</span>
+                <span>Monthly Goal</span>
                 <strong>{{ gauge_stats.target if gauge_stats else 100 }}</strong>
             </div>
             <div class="metric">
@@ -263,27 +304,25 @@
             </div>
             <div class="metric">
                 <span>Today</span>
-                <strong>{{ gauge_stats.today if gauge_stats else 0 }}</strong>
+                <strong style="color: #86efac;">+{{ gauge_stats.today if gauge_stats else 0 }}</strong>
             </div>
         </div>
     </div>
 </div>
 
 <!-- BOTTOM WIDE ROW: Line Chart -->
-<div class="mock-card mb-4" style="margin-top: 30px;">
-    <div class="card-header-flex border-bottom"
-        style="border-color: rgba(255,255,255,0.08)!important; padding-bottom: 15px;">
+<div class="dash-card mb-4">
+    <div class="card-header-flex border-bottom" style="border-color: rgba(255,255,255,0.08)!important; padding-bottom: 20px;">
         <div>
-            <h3 class="card-title">Statistics</h3>
-            <p class="card-subtitle">Daily visitor trend over the last week</p>
+            <h3 class="card-title">Weekly Traffic Statistics</h3>
+            <p class="card-subtitle">Daily registered visitor trend over the last 7 days</p>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-sm"
-                style="background: rgba(255,255,255,0.1); color: #fff; font-weight: 600;">Overview</button>
-            <button class="btn btn-sm" style="color: var(--text-soft);">Courses</button>
+            <button class="btn btn-outline-custom btn-outline-active">Overview</button>
+            <button class="btn btn-outline-custom">Analytics</button>
         </div>
     </div>
-    <div class="area-chart-container mt-3">
+    <div class="area-chart-container mt-4">
         <canvas id="areaChart"></canvas>
     </div>
 </div>
@@ -299,144 +338,147 @@
         const gaugeCtx = document.getElementById('gaugeChart').getContext('2d');
         const achieved = parseInt("{{ gauge_stats.monthly if gauge_stats else 0 }}", 10);
         const target = parseInt("{{ gauge_stats.target if gauge_stats else 100 }}", 10);
-    const remaining = Math.max(0, target - achieved);
+        const remaining = Math.max(0, target - achieved);
 
-    new Chart(gaugeCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Achieved', 'Remaining'],
-            datasets: [{
-                data: [achieved, remaining],
-                backgroundColor: ['#5c67f2', '#e2e8f0'],
-                borderWidth: 0,
-                borderRadius: 20
-            }]
-        },
-        options: {
-            rotation: -90,
-            circumference: 180,
-            cutout: '85%',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
-            }
-        }
-    });
-
-    // ===========================================
-    // 2. BAR CHART (Visitors by Course)
-    // ===========================================
-    const barCtx = document.getElementById('barChart').getContext('2d');
-
-    {% if course_stats %}
-    const rawData = {{ course_stats | tojson
-    }};
-    {% else %}
-    const rawData = [];
-    {% endif %}
-
-    let barLabels = ["Engineering", "Management", "Nursing", "Pharmacy", "Law"];
-    let barData = [0, 0, 0, 0, 0];
-
-    if (rawData && rawData.length > 0) {
-        rawData.forEach(item => {
-            const courseName = item[0];
-            const courseCount = item[1];
-            const idx = barLabels.indexOf(courseName);
-            if (idx !== -1) {
-                barData[idx] = courseCount;
-            } else {
-                barLabels.push(courseName || 'Unknown');
-                barData.push(courseCount);
+        new Chart(gaugeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Achieved', 'Remaining'],
+                datasets: [{
+                    data: [achieved, remaining],
+                    backgroundColor: ['#3b82f6', '#1e293b'],
+                    borderWidth: 0,
+                    borderRadius: 24
+                }]
+            },
+            options: {
+                rotation: -90,
+                circumference: 180,
+                cutout: '84%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
             }
         });
-    }
 
-    new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: barLabels,
-            datasets: [{
-                data: barData,
-                backgroundColor: '#3b82f6',
-                borderRadius: 6,
-                maxBarThickness: 40
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { color: '#a8b7ca', stepSize: 1, font: { family: 'Outfit' } }
-                },
-                x: {
-                    grid: { display: false, drawBorder: false },
-                    ticks: { color: '#a8b7ca', font: { family: 'Outfit' } }
+        // ===========================================
+        // 2. BAR CHART (Visitors by Course)
+        // ===========================================
+        const barCtx = document.getElementById('barChart').getContext('2d');
+
+        {% if course_stats %}
+        const rawData = {{ course_stats | tojson }};
+        {% else %}
+        const rawData = [];
+        {% endif %}
+
+        let barLabels = ["Engineering", "Management", "Nursing", "Pharmacy", "Law"];
+        let barData = [0, 0, 0, 0, 0];
+
+        if (rawData && rawData.length > 0) {
+            rawData.forEach(item => {
+                const courseName = item[0];
+                const courseCount = item[1];
+                const idx = barLabels.indexOf(courseName);
+                if (idx !== -1) {
+                    barData[idx] = courseCount;
+                } else {
+                    barLabels.push(courseName || 'Unknown');
+                    barData.push(courseCount);
+                }
+            });
+        }
+
+        // Cool bar chart gradient 
+        const barGradient = barCtx.createLinearGradient(0, 0, 0, 260);
+        barGradient.addColorStop(0, '#60a5fa');
+        barGradient.addColorStop(1, '#2563eb');
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    data: barData,
+                    backgroundColor: barGradient,
+                    borderRadius: 8,
+                    maxBarThickness: 32
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                        ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Outfit', size: 12 } }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#cbd5e1', font: { family: 'Outfit', size: 13, weight: '500' } }
+                    }
                 }
             }
-        }
-    });
+        });
 
-    // ===========================================
-    // 3. AREA CHART (Smooth Line)
-    // ===========================================
-    const areaCtx = document.getElementById('areaChart').getContext('2d');
+        // ===========================================
+        // 3. AREA CHART (Smooth Line)
+        // ===========================================
+        const areaCtx = document.getElementById('areaChart').getContext('2d');
 
-    // Sleek gradient for area chart
-    const areaGradient = areaCtx.createLinearGradient(0, 0, 0, 300);
-    areaGradient.addColorStop(0, 'rgba(92, 103, 242, 0.4)');
-    areaGradient.addColorStop(1, 'rgba(92, 103, 242, 0.0)');
+        const areaGradient = areaCtx.createLinearGradient(0, 0, 0, 300);
+        areaGradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)');
+        areaGradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
 
-    {% if weekly_trend %}
-    const weekLabels = {{ weekly_trend.labels | tojson }};
-    const weekData = {{ weekly_trend.data | tojson }};
-    {% else %}
-    const weekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const weekData = [0, 0, 0, 0, 0, 0, 0];
-    {% endif %}
+        {% if weekly_trend %}
+        const weekLabels = {{ weekly_trend.labels | tojson }};
+        const weekData = {{ weekly_trend.data | tojson }};
+        {% else %}
+        const weekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const weekData = [0, 0, 0, 0, 0, 0, 0];
+        {% endif %}
 
-    new Chart(areaCtx, {
-        type: 'line',
-        data: {
-            labels: weekLabels,
-            datasets: [{
-                label: 'Visitors',
-                data: weekData, // Dynamic database data
-                borderColor: '#5c67f2',
-                backgroundColor: areaGradient,
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4, // Smooth curve
-                pointBackgroundColor: '#ffffff',
-                pointBorderColor: '#5c67f2',
-                pointBorderWidth: 2,
-                pointRadius: 0,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { color: '#a8b7ca', font: { family: 'Outfit' } }
-                },
-                x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                    ticks: { color: '#a8b7ca', font: { family: 'Outfit' } }
+        new Chart(areaCtx, {
+            type: 'line',
+            data: {
+                labels: weekLabels,
+                datasets: [{
+                    label: 'Visitors',
+                    data: weekData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: areaGradient,
+                    borderWidth: 4,
+                    fill: true,
+                    tension: 0.45, // Super smooth
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#3b82f6',
+                    pointBorderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { padding: 12, titleFont: { size: 14 }, bodyFont: { size: 14 } } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
+                        ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 12 } }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
+                        ticks: { color: '#cbd5e1', padding: 10, font: { family: 'Outfit', size: 13, weight: '500' } }
+                    }
                 }
             }
-        }
+        });
     });
-});
 </script>
 {% endblock %}
