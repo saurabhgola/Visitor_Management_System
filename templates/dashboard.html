@@ -13,14 +13,12 @@
         font-weight: 800;
         font-size: 2.2rem;
         margin-bottom: 6px;
-        letter-spacing: -0.03em;
-        background: linear-gradient(to right, #ffffff, #a8b7ca);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #ffffff;
+        letter-spacing: -0.02em;
     }
 
     .dashboard-header p {
-        color: var(--text-soft); 
+        color: #e0e7ff; 
         font-size: 0.95rem; 
         margin: 0;
     }
@@ -47,20 +45,20 @@
 
     /* Premium Dashboard Cards */
     .dash-card {
-        background: var(--panel);
-        border: 1px solid var(--panel-border);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 20px;
         padding: 28px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        backdrop-filter: blur(16px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         display: flex;
         flex-direction: column;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        color: #0f172a;
     }
     
     .dash-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        box-shadow: 0 16px 36px rgba(0,0,0,0.1);
     }
 
     /* Highlighted Stat Cards */
@@ -73,7 +71,7 @@
     .stat-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; height: 4px;
+        top: 0; left: 0; right: 0; height: 5px;
         background: linear-gradient(90deg, #3b82f6, #8b5cf6);
     }
     
@@ -90,15 +88,15 @@
         justify-content: center;
         font-size: 1.5rem;
         margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
     }
     
-    .icon-blue { color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.2); }
-    .icon-orange { color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .icon-blue { color: #2563eb; background: #eff6ff; border: 1px solid #bfdbfe; }
+    .icon-orange { color: #ea580c; background: #fff7ed; border: 1px solid #fed7aa; }
 
     .stat-label {
         font-size: 1.05rem;
-        color: var(--text-soft);
+        color: #64748b;
         margin-bottom: 8px;
         font-weight: 500;
     }
@@ -106,7 +104,7 @@
     .stat-value {
         font-size: 2.8rem;
         font-weight: 800;
-        color: #fff;
+        color: #0f172a;
         line-height: 1;
         display: flex;
         align-items: center;
@@ -123,8 +121,8 @@
         gap: 6px;
     }
 
-    .trend-up { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
-    .trend-down { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .trend-up { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+    .trend-down { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
     .card-header-flex {
         display: flex;
@@ -136,14 +134,14 @@
     .card-title {
         font-size: 1.25rem;
         font-weight: 800;
-        color: #fff;
+        color: #0f172a;
         margin: 0;
         letter-spacing: 0.02em;
     }
 
     .card-subtitle {
         font-size: 0.9rem;
-        color: var(--text-soft);
+        color: #64748b;
         margin-top: 6px;
     }
 
@@ -167,10 +165,10 @@
         font-size: 2.8rem;
         font-weight: 800;
         margin: 0;
-        color: #fff;
+        color: #0f172a;
     }
     .gauge-text p {
-        color: #86efac;
+        color: #64748b;
         font-weight: 700;
         font-size: 0.9rem;
         margin: 0;
@@ -183,13 +181,13 @@
         display: flex;
         justify-content: space-between;
         text-align: center;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid #f1f5f9;
         padding-top: 24px;
         margin-top: auto;
     }
 
-    .metric span { display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;}
-    .metric strong { font-size: 1.3rem; color: #fff; font-weight: 800; }
+    .metric span { display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;}
+    .metric strong { font-size: 1.3rem; color: #0f172a; font-weight: 800; }
 
     /* Chart Containers */
     .bar-chart-container { height: 260px; position: relative; }
@@ -205,16 +203,16 @@
     
     .btn-outline-custom {
         background: transparent; 
-        border: 1px solid rgba(255,255,255,0.15); 
-        color: #fff; 
+        border: 1px solid #e2e8f0; 
+        color: #475569; 
         padding: 8px 16px; 
         border-radius: 10px; 
         font-weight: 600; 
         font-size: 0.9rem;
         transition: all 0.2s;
     }
-    .btn-outline-custom:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-    .btn-outline-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+    .btn-outline-custom:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+    .btn-outline-active { background: #eff6ff; border-color: #bfdbfe; color: #2563eb; }
 
 </style>
 {% endblock %}
@@ -289,8 +287,8 @@
             </div>
         </div>
 
-        <p style="text-align: center; color: var(--text-soft); font-size: 1rem; line-height: 1.6; margin-bottom: 30px;">
-            You recorded <strong class="text-white">{{ gauge_stats.today if gauge_stats else 0 }} visitors</strong> today.<br> Keep pushing for your monthly target!
+        <p style="text-align: center; color: #475569; font-size: 1rem; line-height: 1.6; margin-bottom: 30px;">
+            You recorded <strong class="text-slate-900">{{ gauge_stats.today if gauge_stats else 0 }} visitors</strong> today.<br> Keep pushing for your monthly target!
         </p>
 
         <div class="target-metrics">
@@ -304,7 +302,7 @@
             </div>
             <div class="metric">
                 <span>Today</span>
-                <strong style="color: #86efac;">+{{ gauge_stats.today if gauge_stats else 0 }}</strong>
+                <strong style="color: #16a34a;">+{{ gauge_stats.today if gauge_stats else 0 }}</strong>
             </div>
         </div>
     </div>
@@ -312,7 +310,7 @@
 
 <!-- BOTTOM WIDE ROW: Line Chart -->
 <div class="dash-card mb-4">
-    <div class="card-header-flex border-bottom" style="border-color: rgba(255,255,255,0.08)!important; padding-bottom: 20px;">
+    <div class="card-header-flex border-bottom" style="border-color: #f1f5f9!important; padding-bottom: 20px;">
         <div>
             <h3 class="card-title">Weekly Traffic Statistics</h3>
             <p class="card-subtitle">Daily registered visitor trend over the last 7 days</p>
@@ -346,7 +344,7 @@
                 labels: ['Achieved', 'Remaining'],
                 datasets: [{
                     data: [achieved, remaining],
-                    backgroundColor: ['#3b82f6', '#1e293b'],
+                    backgroundColor: ['#3b82f6', '#e2e8f0'],
                     borderWidth: 0,
                     borderRadius: 24
                 }]
@@ -415,12 +413,12 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                        ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Outfit', size: 12 } }
+                        grid: { color: '#f1f5f9', drawBorder: false },
+                        ticks: { color: '#64748b', stepSize: 1, font: { family: 'Outfit', size: 12 } }
                     },
                     x: {
                         grid: { display: false, drawBorder: false },
-                        ticks: { color: '#cbd5e1', font: { family: 'Outfit', size: 13, weight: '500' } }
+                        ticks: { color: '#475569', font: { family: 'Outfit', size: 13, weight: '500' } }
                     }
                 }
             }
@@ -432,7 +430,7 @@
         const areaCtx = document.getElementById('areaChart').getContext('2d');
 
         const areaGradient = areaCtx.createLinearGradient(0, 0, 0, 300);
-        areaGradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)');
+        areaGradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
         areaGradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
 
         {% if weekly_trend %}
@@ -469,12 +467,12 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
-                        ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 12 } }
+                        grid: { color: '#f8fafc', drawBorder: false },
+                        ticks: { color: '#64748b', font: { family: 'Outfit', size: 12 } }
                     },
                     x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
-                        ticks: { color: '#cbd5e1', padding: 10, font: { family: 'Outfit', size: 13, weight: '500' } }
+                        grid: { color: '#f8fafc', drawBorder: false },
+                        ticks: { color: '#475569', padding: 10, font: { family: 'Outfit', size: 13, weight: '500' } }
                     }
                 }
             }

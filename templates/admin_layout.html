@@ -19,15 +19,16 @@
 
     <style>
         :root {
-            --bg-dark: #030f26;      /* Extremely deep institutional navy */
-            --bg-mid: #0b224a;       /* Slightly lighter navy */
-            --sidebar: rgba(4, 17, 38, 0.95);
-            --panel: rgba(14, 38, 79, 0.78);
-            --panel-border: rgba(59, 130, 246, 0.20); /* Light blue panel borders */
-            --text-main: #f3f7fc;
-            --text-soft: #94a3b8;
-            --accent: #3b82f6;      /* Primary College Blue */
-            --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+            --bg-dark: #1e3a8a;      /* Deep blue background */
+            --bg-mid: #2563eb;       /* Primary blue background */
+            --sidebar: #1e40af;      /* Solid Blue sidebar */
+            --panel: #ffffff;        /* Solid WHITE cards */
+            --panel-border: #e2e8f0; /* Light gray panel borders */
+            --text-main: #0f172a;    /* Dark text for white cards */
+            --text-soft: #64748b;    /* Medium gray text for white cards */
+            --text-bg: #ffffff;      /* White text for elements directly on the blue background */
+            --accent: #3b82f6;      
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Soft shadow for light mode */
         }
 
         * {
@@ -38,11 +39,8 @@
             margin: 0;
             min-height: 100vh;
             font-family: "Outfit", sans-serif;
-            color: var(--text-main);
-            background:
-                radial-gradient(circle at top left, rgba(37, 99, 235, 0.15), transparent 40%),
-                radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.1), transparent 35%),
-                linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+            color: var(--text-bg); /* Default text for the blue background is white */
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
             background-attachment: fixed;
             overflow-x: hidden;
         }
@@ -60,11 +58,10 @@
             top: 0;
             height: 100vh;
             background: var(--sidebar);
-            border-right: 1px solid var(--panel-border);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
             padding: 30px 20px;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(12px);
             z-index: 100;
         }
 
@@ -74,8 +71,8 @@
             gap: 10px;
             padding: 10px 14px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.05);
-            color: #93c5fd;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
             font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.05em;
@@ -89,8 +86,8 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            background: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
         }
 
         .sidebar-nav {
@@ -107,7 +104,7 @@
             padding: 14px 18px;
             border-radius: 14px;
             text-decoration: none;
-            color: #e2e8f0;
+            color: #e0e7ff;
             font-weight: 600;
             font-size: 1.05rem;
             transition: all 0.2s ease;
@@ -123,9 +120,9 @@
 
         .nav-button:hover {
             transform: translateX(4px);
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
         }
 
         .nav-button:hover i {
@@ -135,13 +132,13 @@
 
         /* Unified Institutional Blue Active State */
         .nav-button.active { 
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(29, 78, 216, 0.05)); 
-            border-color: rgba(59, 130, 246, 0.3); 
-            color: #93c5fd; 
-            box-shadow: inset 4px 0 0 #3b82f6; 
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3); 
+            color: #ffffff; 
+            box-shadow: inset 4px 0 0 #ffffff; 
         }
         .nav-button.active i {
-            color: #60a5fa;
+            color: #ffffff;
             opacity: 1;
         }
         
@@ -155,9 +152,9 @@
         
         .nav-logout:hover {
             opacity: 1;
-            background: rgba(239, 68, 68, 0.1);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
+            color: #fee2e2;
+            border: 1px solid rgba(239, 68, 68, 0.4);
         }
 
         .admin-main {
@@ -171,19 +168,8 @@
             border: 1px solid var(--panel-border);
             border-radius: 24px;
             box-shadow: var(--shadow);
-            backdrop-filter: blur(16px);
             padding: 24px;
-        }
-
-        /* Form Visibility Fixes */
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
-            opacity: 1; /* Fix for Firefox */
-        }
-
-        .form-select option {
-            background-color: var(--bg-dark) !important;
-            color: #ffffff !important;
+            color: var(--text-main); /* Dark text for white cards */
         }
 
         /* Responsive */
@@ -196,8 +182,7 @@
                 height: auto;
                 position: relative;
                 padding: 20px;
-                border-right: none;
-                border-bottom: 1px solid var(--panel-border);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
 
             .sidebar-nav {

@@ -19,20 +19,23 @@ logging.basicConfig(level=logging.INFO)
 
 # ---------------- DATABASE ----------------
 DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 DEFAULT_ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@gmail.com").strip().lower()
 DEFAULT_ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin@123")
 
 
 def get_connection():
     if not DATABASE_URL:
-        raise RuntimeError("DATABASE_URL is not set. Check your .env file.")
+        logging.error("DATABASE_URL is not set. Please set it in Render environment variables.")
+        raise RuntimeError("DATABASE_URL is not set.")
 
     try:
         return psycopg2.connect(DATABASE_URL)
-    except psycopg2.OperationalError as exc:
-        raise RuntimeError(
-            "Database connection failed. Check DATABASE_URL, PostgreSQL host/port, username, and password."
-        ) from exc
+    except Exception as exc:
+        logging.error(f"Database connection failed: {exc}")
+        raise RuntimeError("Database connection failed.") from exc
 
 
 def create_tables():
@@ -98,9 +101,12 @@ def seed_default_admin():
     conn.close()
 
 
-create_tables()
-seed_default_admin()
-print("Connected successfully")
+try:
+    create_tables()
+    seed_default_admin()
+    print("Database initialized successfully")
+except Exception as e:
+    print(f"Error initializing database: {e}")
 
 
 # ---------------- SAVE TO DB ----------------
@@ -544,4 +550,5 @@ def not_found(e):
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)

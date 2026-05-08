@@ -15,18 +15,17 @@
 
     /* Core Panel */
     .records-panel {
-        background: var(--panel);
-        border: 1px solid var(--panel-border);
-        border-radius: 20px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
         padding: 28px;
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(16px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     }
 
     /* Search & Filter Ribbon */
     .filter-ribbon {
-        background: rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
         border-radius: 16px;
         padding: 16px;
         margin-bottom: 24px;
@@ -46,59 +45,66 @@
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        color: var(--text-soft);
+        color: #64748b;
         font-size: 1.1rem;
     }
 
     .search-input {
         width: 100%;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
         border-radius: 12px;
         padding: 12px 16px 12px 46px;
-        color: var(--text-main);
+        color: #0f172a;
         font-family: inherit;
         font-size: 0.95rem;
         transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .search-input:focus {
         outline: none;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(59, 130, 246, 0.5);
+        background: #ffffff;
+        border-color: #60a5fa;
         box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+    
+    .search-input::placeholder {
+        color: #94a3b8;
     }
 
     .filter-select {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
         border-radius: 12px;
         padding: 12px 16px;
-        color: var(--text-main);
+        color: #0f172a;
         font-size: 0.95rem;
         min-width: 180px;
         cursor: pointer;
         transition: all 0.2s ease;
         appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a8b7ca' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 16px center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .filter-select:focus {
         outline: none;
-        border-color: rgba(59, 130, 246, 0.5);
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
     }
 
     .filter-select option {
-        background: var(--bg-dark);
-        color: #fff;
+        background: #ffffff;
+        color: #0f172a;
     }
 
     .btn-custom-action {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #fff;
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #475569;
         padding: 12px 20px;
         border-radius: 12px;
         font-weight: 600;
@@ -107,16 +113,18 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .btn-custom-action:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: #f1f5f9;
+        color: #0f172a;
     }
     
     .btn-download-primary {
-        background: rgba(34, 197, 94, 0.15);
-        color: #86efac;
-        border: 1px solid rgba(34, 197, 94, 0.2);
+        background: #dcfce7;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
         padding: 10px 20px;
         border-radius: 10px;
         font-weight: 700;
@@ -124,37 +132,38 @@
         transition: all 0.2s;
     }
     .btn-download-primary:hover {
-        background: rgba(34, 197, 94, 0.25);
-        color: #bbf7d0;
+        background: #bbf7d0;
+        color: #15803d;
     }
 
     /* Table Styles */
     .table-container {
         border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid #e2e8f0;
         overflow: hidden;
     }
 
     .table {
         margin-bottom: 0;
-        color: var(--text-main);
+        color: #0f172a;
     }
 
     table th {
-        background: rgba(255, 255, 255, 0.03) !important;
-        color: var(--text-soft) !important;
+        background: #f8fafc !important;
+        color: #475569 !important;
         font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 700;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-bottom: 1px solid #e2e8f0 !important;
         padding: 18px 24px !important;
+        border-top: none !important;
     }
 
     table td {
-        background: transparent !important;
-        color: #dce7f5 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        border-bottom: 1px solid #f1f5f9 !important;
         padding: 18px 24px !important;
         vertical-align: middle;
     }
@@ -164,7 +173,7 @@
     }
 
     table tbody tr:hover td {
-        background: rgba(255, 255, 255, 0.03) !important;
+        background: #f8fafc !important;
     }
 
     /* Avatar Initial */
@@ -180,7 +189,7 @@
         font-size: 1.05rem;
         color: #fff;
         margin-right: 14px;
-        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
     }
 
     /* Badges */
@@ -205,58 +214,65 @@
     }
     
     .btn-edit {
-        background: rgba(59, 130, 246, 0.1);
-        color: #93c5fd;
-        border: 1px solid rgba(59, 130, 246, 0.2);
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
     }
-    .btn-edit:hover { background: rgba(59, 130, 246, 0.2); color: #bfdbfe; }
+    .btn-edit:hover { background: #dbeafe; color: #1d4ed8; }
 
     .btn-delete {
-        background: rgba(239, 68, 68, 0.1);
-        color: #fca5a5;
-        border: 1px solid rgba(239, 68, 68, 0.2);
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
         margin-left: 6px;
     }
-    .btn-delete:hover { background: rgba(239, 68, 68, 0.2); color: #fecaca; }
+    .btn-delete:hover { background: #fee2e2; color: #b91c1c; }
     
     /* Empty State */
     .empty-state {
         text-align: center;
         padding: 60px 20px;
         display: none;
+        background: #ffffff;
     }
     .empty-icon {
         font-size: 3rem;
-        color: rgba(255,255,255,0.1);
+        color: #e2e8f0;
         margin-bottom: 16px;
+    }
+    
+    /* External body headers for layout pages */
+    .dashboard-header-text {
+        font-weight: 800; 
+        font-size: 2.2rem; 
+        margin-bottom: 6px; 
+        letter-spacing: -0.03em;
+        color: #ffffff;
+    }
+    .dashboard-header-sub {
+        color: #e0e7ff; 
+        font-size: 0.95rem; 
+        margin: 0;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="records-panel">
-    <div class="header-group">
-        <div>
-            <h2 style="font-weight: 800; font-size: 2.2rem; margin-bottom: 6px; letter-spacing: -0.03em;">Visitor Directory</h2>
-            <p style="color: var(--text-soft); font-size: 0.95rem; margin: 0;">Manage, search, and export your facility's registered visitors seamlessly.</p>
-        </div>
-        
-        <div>
-            <a href="{{ url_for('download') }}" class="btn-download-primary d-inline-flex align-items-center gap-2">
-                <i class="bi bi-file-earmark-excel-fill"></i> Download Excel
-            </a>
-        </div>
+<div class="header-group">
+    <div>
+        <h2 class="dashboard-header-text">Visitor Directory</h2>
+        <p class="dashboard-header-sub">Manage, search, and export your facility's registered visitors seamlessly.</p>
     </div>
+</div>
 
+<div class="records-panel">
     <!-- Filter Ribbon -->
     <div class="filter-ribbon">
-        <!-- Search Input -->
         <div class="search-wrapper">
             <i class="bi bi-search"></i>
             <input type="text" id="nameSearch" class="search-input" placeholder="Search visitors by name...">
         </div>
 
-        <!-- Course Filter -->
         <select id="courseSearch" class="filter-select">
             <option value="">All Courses</option>
             <option value="Engineering">Engineering</option>
@@ -266,10 +282,17 @@
             <option value="Law">Law</option>
         </select>
 
-        <!-- Reset Button -->
         <button class="btn-custom-action" onclick="resetFilters()">
             <i class="bi bi-arrow-counterclockwise"></i> Reset
         </button>
+        
+        <div style="flex-grow: 1;"></div>
+        
+        <div>
+            <a href="{{ url_for('download') }}" class="btn-download-primary d-inline-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-excel-fill"></i> Download Excel
+            </a>
+        </div>
     </div>
 
     <!-- Data Table -->
@@ -288,19 +311,19 @@
             <tbody>
               {% for row in rows %}
                 <tr class="visitor-row">
-                    <td class="text-white-50">#{{ row[0] }}</td>
+                    <td class="text-secondary fw-medium">#{{ row[0] }}</td>
                     
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="avatar-circle">{{ row[1][0]|upper }}</div>
                             <div>
-                                <div class="fw-bold text-white mb-1" style="font-size:1.05rem;">{{ row[1] }}</div>
+                                <div class="fw-bold text-slate-900 mb-1" style="font-size:1.05rem;">{{ row[1] }}</div>
                             </div>
                         </div>
                     </td>
                     
                     <td>
-                        <span style="font-family: monospace; font-size: 1rem; color: #a8b7ca;">
+                        <span style="font-family: monospace; font-size: 1rem; color: #475569;">
                             <i class="bi bi-telephone text-primary me-2" style="font-size: 0.85rem;"></i>{{ row[2] }}
                         </span>
                     </td>
@@ -310,8 +333,8 @@
                     </td>
                     
                     <td>
-                        <div style="color: #fff; font-weight: 500;">{{ row[4] }}</div>
-                        <div style="color: var(--text-soft); font-size: 0.85rem; margin-top: 4px;">Contact: {{ row[5] }}</div>
+                        <div style="color: #0f172a; font-weight: 600;">{{ row[4] }}</div>
+                        <div style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">Contact: {{ row[5] }}</div>
                     </td>
 
                     <td class="text-end">
@@ -331,8 +354,8 @@
         <!-- Empty State Message -->
         <div class="empty-state" id="emptyState">
             <div class="empty-icon"><i class="bi bi-inbox"></i></div>
-            <h4 class="text-white fw-bold mb-2">No visitors found</h4>
-            <p style="color: var(--text-soft);">Try adjusting your search or course filters to find what you're looking for.</p>
+            <h4 class="text-slate-900 fw-bold mb-2">No visitors found</h4>
+            <p style="color: #64748b;">Try adjusting your search or course filters to find what you're looking for.</p>
             <button class="btn-custom-action mx-auto mt-3" onclick="resetFilters()">Clear Filters</button>
         </div>
     </div>
@@ -341,21 +364,22 @@
 
 {% block extra_js %}
 <script>
-    // Colorful Badges Logic
+    // Colorful Badges Logic for Light Mode
     document.addEventListener("DOMContentLoaded", () => {
         const badges = document.querySelectorAll('.badge-course');
         badges.forEach(badge => {
             const course = badge.getAttribute('data-course');
-            let bg, color;
-            if (course === 'Engineering') { bg = 'rgba(59, 130, 246, 0.15)'; color = '#93c5fd'; }
-            else if (course === 'Nursing') { bg = 'rgba(34, 197, 94, 0.15)'; color = '#86efac'; }
-            else if (course === 'Pharmacy') { bg = 'rgba(168, 85, 247, 0.15)'; color = '#d8b4fe'; }
-            else if (course === 'Management') { bg = 'rgba(245, 158, 11, 0.15)'; color = '#fcd34d'; }
-            else if (course === 'Law') { bg = 'rgba(239, 68, 68, 0.15)'; color = '#fca5a5'; }
-            else { bg = 'rgba(255, 255, 255, 0.1)'; color = '#dce7f5'; }
+            let bg, color, border;
+            if (course === 'Engineering') { bg = '#eff6ff'; color = '#2563eb'; border = '#bfdbfe'; }
+            else if (course === 'Nursing') { bg = '#f0fdf4'; color = '#16a34a'; border = '#bbf7d0'; }
+            else if (course === 'Pharmacy') { bg = '#faf5ff'; color = '#9333ea'; border = '#e9d5ff'; }
+            else if (course === 'Management') { bg = '#fffbeb'; color = '#d97706'; border = '#fde68a'; }
+            else if (course === 'Law') { bg = '#fef2f2'; color = '#dc2626'; border = '#fecaca'; }
+            else { bg = '#f8fafc'; color = '#475569'; border = '#e2e8f0'; }
             
             badge.style.background = bg;
             badge.style.color = color;
+            badge.style.border = `1px solid ${border}`;
         });
     });
 
