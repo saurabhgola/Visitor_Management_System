@@ -5,7 +5,8 @@ import os
 from datetime import date, timedelta
 
 import pandas as pd
-import psycopg2
+from datetime import datetime
+from models import Visitor, Admin, connect_db
 import requests
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -18,174 +19,63 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # ---------------- DATABASE ----------------
-DATABASE_URL = os.environ.get("DATABASE_URL")
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+connect_db()
 
 DEFAULT_ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@gmail.com").strip().lower()
 DEFAULT_ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin@123")
 
-
-def get_connection():
-    if not DATABASE_URL:
-        logging.error("DATABASE_URL is not set. Please set it in Render environment variables.")
-        raise RuntimeError("DATABASE_URL is not set.")
-
-    try:
-        return psycopg2.connect(DATABASE_URL)
-    except Exception as exc:
-        logging.error(f"Database connection failed: {exc}")
-        raise RuntimeError("Database connection failed.") from exc
-
-
-def create_tables():
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute(
-        """
-        CREATE TABLE IF NOT EXISTS visitors (
-            id SERIAL PRIMARY KEY,
-            student_name TEXT,
-            student_number TEXT,
-            course_name TEXT,
-            parent_name TEXT,
-            parent_contact TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        """
-    )
-
-    cur.execute(
-        """
-        ALTER TABLE visitors
-        ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        """
-    )
-
-    cur.execute(
-        """
-        CREATE TABLE IF NOT EXISTS admins (
-            id SERIAL PRIMARY KEY,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        """
-    )
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
 def seed_default_admin():
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT id FROM admins WHERE email = %s", (DEFAULT_ADMIN_EMAIL,))
-    admin = cur.fetchone()
+    admin = Admin.objects(email=DEFAULT_ADMIN_EMAIL).first()
 
     if not admin:
-        cur.execute(
-            """
-            INSERT INTO admins (email, password_hash)
-            VALUES (%s, %s)
-            """,
-            (DEFAULT_ADMIN_EMAIL, generate_password_hash(DEFAULT_ADMIN_PASSWORD)),
-        )
-        conn.commit()
+        Admin(
+            email=DEFAULT_ADMIN_EMAIL,
+            password_hash=generate_password_hash(DEFAULT_ADMIN_PASSWORD)
+        ).save()
         logging.info("Default admin created: %s", DEFAULT_ADMIN_EMAIL)
 
-    cur.close()
-    conn.close()
 
-
-try:
-    create_tables()
-    seed_default_admin()
-    print("Database initialized successfully")
-except Exception as e:
-    print(f"Error initializing database: {e}")
+seed_default_admin()
 
 
 # ---------------- SAVE TO DB ----------------
 def save_to_db(data):
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute(
-        """
-        INSERT INTO visitors
-        (student_name, student_number, course_name, parent_name, parent_contact)
-        VALUES (%s, %s, %s, %s, %s)
-        """,
-        data,
-    )
-
-    conn.commit()
-    cur.close()
-    conn.close()
+    # data is [student_name, student_number, course_name, parent_name, parent_contact]
+    Visitor(
+        student_name=data[0],
+        student_number=data[1],
+        course_name=data[2],
+        parent_name=data[3],
+        parent_contact=data[4]
+    ).save()
 
 
 # ---------------- CHECK DUPLICATE ----------------
 def is_duplicate(phone):
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT 1 FROM visitors WHERE student_number = %s", (phone,))
-    result = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    return result is not None
+    return Visitor.objects(student_number=phone).first() is not None
 
 
 # ---------------- GET TOTAL ----------------
 def get_total():
-    conn = get_connection()
-    cur = conn.cursor()
+    return Visitor.objects.count()
 
-    cur.execute("SELECT COUNT(*) FROM visitors")
-    total = cur.fetchone()[0]
-
-    cur.close()
-    conn.close()
-    return total
 
 def get_course_stats():
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT course_name, COUNT(*) FROM visitors GROUP BY course_name")
-    stats = cur.fetchall()
-
-    cur.close()
-    conn.close()
-    return stats
+    pipeline = [
+        {"$group": {"_id": "$course_name", "count": {"$sum": 1}}}
+    ]
+    results = Visitor.objects.aggregate(pipeline)
+    return [(r["_id"], r["count"]) for r in results]
 
 
 def get_gauge_stats():
-    conn = get_connection()
-    cur = conn.cursor()
-    
-    cur.execute("""
-        SELECT COUNT(*) FROM visitors 
-        WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
-    """)
-    monthly_visitors = cur.fetchone()[0]
+    now = datetime.utcnow()
+    start_of_month = datetime(now.year, now.month, 1)
+    start_of_today = datetime(now.year, now.month, now.day)
 
-    cur.execute("""
-        SELECT COUNT(*) FROM visitors 
-        WHERE DATE(created_at) = CURRENT_DATE
-    """)
-    today_visitors = cur.fetchone()[0]
+    monthly_visitors = Visitor.objects(created_at__gte=start_of_month).count()
+    today_visitors = Visitor.objects(created_at__gte=start_of_today).count()
 
-    cur.close()
-    conn.close()
-    
     return {
         "monthly": monthly_visitors,
         "today": today_visitors,
@@ -193,27 +83,21 @@ def get_gauge_stats():
     }
 
 def get_weekly_trend():
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT DATE(created_at), COUNT(*) 
-        FROM visitors 
-        WHERE created_at >= CURRENT_DATE - INTERVAL '6 days'
-        GROUP BY DATE(created_at)
-        ORDER BY DATE(created_at) ASC
-    """)
-    db_rows = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    db_dict = {}
-    for row in db_rows:
-        try:
-            key = row[0].strftime('%Y-%m-%d') if hasattr(row[0], 'strftime') else str(row[0])
-            db_dict[key] = row[1]
-        except Exception:
-            pass
-            
+    now = datetime.utcnow()
+    seven_days_ago = datetime(now.year, now.month, now.day) - timedelta(days=6)
+    
+    pipeline = [
+        {"$match": {"created_at": {"$gte": seven_days_ago}}},
+        {"$project": {
+            "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}}
+        }},
+        {"$group": {"_id": "$date", "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
+    
+    results = list(Visitor.objects.aggregate(pipeline))
+    db_dict = {r["_id"]: r["count"] for r in results}
+    
     today_dt = date.today()
     labels = []
     data = []
@@ -228,57 +112,42 @@ def get_weekly_trend():
 
 # ---------------- GET ALL VISITORS ----------------
 def get_all_visitors(filter_type=None):
-    conn = get_connection()
-    cur = conn.cursor()
-
+    now = datetime.utcnow()
+    visitors_query = Visitor.objects
+    
     if filter_type == "today":
-        cur.execute(
-            """
-            SELECT * FROM visitors
-            WHERE DATE(created_at) = CURRENT_DATE
-            ORDER BY id DESC
-            """
-        )
+        start_of_today = datetime(now.year, now.month, now.day)
+        visitors_query = visitors_query.filter(created_at__gte=start_of_today)
     elif filter_type == "week":
-        cur.execute(
-            """
-            SELECT * FROM visitors
-            WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'
-            ORDER BY id DESC
-            """
-        )
-    else:
-        cur.execute("SELECT * FROM visitors ORDER BY id DESC")
+        seven_days_ago = now - timedelta(days=7)
+        visitors_query = visitors_query.filter(created_at__gte=seven_days_ago)
 
-    rows = cur.fetchall()
+    visitors = visitors_query.order_by('-id')
+    
+    rows = []
+    for v in visitors:
+        rows.append((
+            str(v.id),
+            v.student_name,
+            v.student_number,
+            v.course_name,
+            v.parent_name,
+            v.parent_contact,
+            v.created_at.strftime("%Y-%m-%d %H:%M:%S") if v.created_at else ""
+        ))
+
     headers = ["ID", "Student Name", "Phone", "Course", "Parent", "Parent Contact", "Date Added"]
-
-    cur.close()
-    conn.close()
-
     return headers, rows
 
 
 def verify_admin_login(email, password):
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute(
-        "SELECT id, email, password_hash FROM admins WHERE email = %s",
-        (email.strip().lower(),),
-    )
-    admin = cur.fetchone()
-
-    cur.close()
-    conn.close()
+    admin = Admin.objects(email=email.strip().lower()).first()
 
     if not admin:
         return None
 
-    admin_id, admin_email, password_hash = admin
-
-    if check_password_hash(password_hash, password):
-        return {"id": admin_id, "email": admin_email}
+    if check_password_hash(admin.password_hash, password):
+        return {"id": str(admin.id), "email": admin.email}
 
     return None
 
@@ -433,16 +302,21 @@ def view_visitors():
 # ---------------- DOWNLOAD FILE ----------------
 @app.route("/download")
 def download():
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM visitors ORDER BY id DESC")
-    rows = cur.fetchall()
+    visitors = Visitor.objects.order_by('-id')
+    
+    rows = []
+    for v in visitors:
+        rows.append((
+            str(v.id),
+            v.student_name,
+            v.student_number,
+            v.course_name,
+            v.parent_name,
+            v.parent_contact,
+            v.created_at.strftime("%Y-%m-%d %H:%M:%S") if v.created_at else ""
+        ))
 
     headers = ["ID", "Student Name", "Phone", "Course", "Parent", "Parent Contact", "Date Added"]
-
-    cur.close()
-    conn.close()
 
     df = pd.DataFrame(rows, columns=headers)
     output = io.BytesIO()
@@ -458,60 +332,46 @@ def download():
 
 
 # ---------------- DELETE VISITOR FUNCTION ----------------
-@app.route("/delete/<int:id>")
+@app.route("/delete/<id>")
 def delete_visitor(id):
     if not session.get("admin"):
         return redirect("/login")
 
-    conn = get_connection()
-    cur = conn.cursor()
-
-    cur.execute("DELETE FROM visitors WHERE id = %s", (id,))
-
-    conn.commit()
-    cur.close()
-    conn.close()
+    Visitor.objects(id=id).delete()
 
     return redirect("/view_visitors")
 
 
 # ---------------- EDIT VISITOR ----------------
-@app.route("/edit/<int:id>", methods=["GET", "POST"])
+@app.route("/edit/<id>", methods=["GET", "POST"])
 def edit_visitor(id):
     if not session.get("admin"):
         return redirect("/login")
 
-    conn = get_connection()
-    cur = conn.cursor()
+    visitor_obj = Visitor.objects(id=id).first()
+    if not visitor_obj:
+        return "Visitor not found", 404
 
     if request.method == "POST":
-        student_name = request.form.get("student_name")
-        student_number = request.form.get("student_number")
-        course_name = request.form.get("course_name")
-        parent_name = request.form.get("parent_name")
-        parent_contact = request.form.get("parent_contact")
-
-        cur.execute(
-            """
-            UPDATE visitors
-            SET student_name = %s, student_number = %s, course_name = %s,
-                parent_name = %s, parent_contact = %s
-            WHERE id = %s
-            """,
-            (student_name, student_number, course_name, parent_name, parent_contact, id),
+        visitor_obj.update(
+            student_name=request.form.get("student_name"),
+            student_number=request.form.get("student_number"),
+            course_name=request.form.get("course_name"),
+            parent_name=request.form.get("parent_name"),
+            parent_contact=request.form.get("parent_contact")
         )
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
         return redirect("/view_visitors")
 
-    cur.execute("SELECT * FROM visitors WHERE id = %s", (id,))
-    visitor = cur.fetchone()
-
-    cur.close()
-    conn.close()
+    # Format for the template which expects a tuple-like row
+    visitor = (
+        str(visitor_obj.id),
+        visitor_obj.student_name,
+        visitor_obj.student_number,
+        visitor_obj.course_name,
+        visitor_obj.parent_name,
+        visitor_obj.parent_contact,
+        visitor_obj.created_at
+    )
 
     return render_template("edit.html", visitor=visitor)
 
@@ -550,5 +410,4 @@ def not_found(e):
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=10000)
