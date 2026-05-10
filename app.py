@@ -252,6 +252,27 @@ def bulk_message():
             for num in manual_input.replace(",", "\n").split("\n"):
                 if num.strip():
                     numbers.append(num.strip())
+                    
+        # Process uploaded Excel file
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename != '' and file.filename.endswith('.xlsx'):
+                try:
+                    df = pd.read_excel(file)
+                    # Find a column that looks like phone numbers
+                    for col in df.columns:
+                        col_str = str(col).lower()
+                        if 'phone' in col_str or 'number' in col_str or 'contact' in col_str:
+                            for val in df[col].dropna():
+                                num_str = str(val).strip()
+                                if num_str.endswith('.0'):
+                                    num_str = num_str[:-2]
+                                if num_str:
+                                    numbers.append(num_str)
+                            break
+                except Exception as e:
+                    logging.error(f"Error reading Excel file: {e}")
+                    return f"Error reading Excel file: {e}"
 
         if not numbers:
             return "No numbers found."
@@ -266,7 +287,7 @@ def bulk_message():
         if failed:
             return f"Failed for: {', '.join(failed)}"
 
-        return "Bulk messages sent successfully!"
+        return redirect("/bulk_message?success=1")
 
     return render_template("bulk_message.html")
 

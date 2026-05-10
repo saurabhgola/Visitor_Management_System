@@ -19,7 +19,7 @@
         border: 1px solid #e2e8f0;
         border-radius: 24px;
         padding: 28px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     }
 
     /* Search & Filter Ribbon */
@@ -59,7 +59,7 @@
         font-family: inherit;
         font-size: 0.95rem;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
     .search-input:focus {
@@ -68,7 +68,7 @@
         border-color: #60a5fa;
         box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
     }
-    
+
     .search-input::placeholder {
         color: #94a3b8;
     }
@@ -87,7 +87,7 @@
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 16px center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
     .filter-select:focus {
@@ -113,14 +113,14 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
     .btn-custom-action:hover {
         background: #f1f5f9;
         color: #0f172a;
     }
-    
+
     .btn-download-primary {
         background: #dcfce7;
         color: #16a34a;
@@ -131,6 +131,7 @@
         text-decoration: none;
         transition: all 0.2s;
     }
+
     .btn-download-primary:hover {
         background: #bbf7d0;
         color: #15803d;
@@ -212,13 +213,17 @@
         transition: all 0.2s;
         text-decoration: none;
     }
-    
+
     .btn-edit {
         background: #eff6ff;
         color: #2563eb;
         border: 1px solid #bfdbfe;
     }
-    .btn-edit:hover { background: #dbeafe; color: #1d4ed8; }
+
+    .btn-edit:hover {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
 
     .btn-delete {
         background: #fef2f2;
@@ -226,8 +231,12 @@
         border: 1px solid #fecaca;
         margin-left: 6px;
     }
-    .btn-delete:hover { background: #fee2e2; color: #b91c1c; }
-    
+
+    .btn-delete:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
     /* Empty State */
     .empty-state {
         text-align: center;
@@ -235,23 +244,25 @@
         display: none;
         background: #ffffff;
     }
+
     .empty-icon {
         font-size: 3rem;
         color: #e2e8f0;
         margin-bottom: 16px;
     }
-    
+
     /* External body headers for layout pages */
     .dashboard-header-text {
-        font-weight: 800; 
-        font-size: 2.2rem; 
-        margin-bottom: 6px; 
+        font-weight: 800;
+        font-size: 2.2rem;
+        margin-bottom: 6px;
         letter-spacing: -0.03em;
         color: #ffffff;
     }
+
     .dashboard-header-sub {
-        color: #e0e7ff; 
-        font-size: 0.95rem; 
+        color: #e0e7ff;
+        font-size: 0.95rem;
         margin: 0;
     }
 </style>
@@ -285,9 +296,9 @@
         <button class="btn-custom-action" onclick="resetFilters()">
             <i class="bi bi-arrow-counterclockwise"></i> Reset
         </button>
-        
+
         <div style="flex-grow: 1;"></div>
-        
+
         <div>
             <a href="{{ url_for('download') }}" class="btn-download-primary d-inline-flex align-items-center gap-2">
                 <i class="bi bi-file-earmark-excel-fill"></i> Download Excel
@@ -300,7 +311,7 @@
         <table class="table align-middle" id="visitorTable">
             <thead>
                 <tr>
-                    <th style="width: 5%">ID</th>
+                    <!-- <th style="width: 5%">ID</th> -->
                     <th style="width: 25%">Visitor Identity</th>
                     <th style="width: 15%">Phone Number</th>
                     <th style="width: 15%">Target Course</th>
@@ -309,10 +320,10 @@
                 </tr>
             </thead>
             <tbody>
-              {% for row in rows %}
+                {% for row in rows %}
                 <tr class="visitor-row">
-                    <td class="text-secondary fw-medium">#{{ row[0] }}</td>
-                    
+                    <!-- <td class="text-secondary fw-medium">#{{ row[0] }}</td> -->
+
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="avatar-circle">{{ row[1][0]|upper }}</div>
@@ -321,36 +332,38 @@
                             </div>
                         </div>
                     </td>
-                    
+
                     <td>
                         <span style="font-family: monospace; font-size: 1rem; color: #475569;">
                             <i class="bi bi-telephone text-primary me-2" style="font-size: 0.85rem;"></i>{{ row[2] }}
                         </span>
                     </td>
-                    
+
                     <td class="course-cell">
                         <span class="badge-course" data-course="{{ row[3] }}">{{ row[3] }}</span>
                     </td>
-                    
+
                     <td>
                         <div style="color: #0f172a; font-weight: 600;">{{ row[4] }}</div>
                         <div style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">Contact: {{ row[5] }}</div>
                     </td>
 
                     <td class="text-end">
-                        <a href="{{ url_for('edit_visitor', id=row[0]) }}" title="Edit Record" class="action-icon-btn btn-edit">
-                           <i class="bi bi-pencil-square"></i>
+                        <a href="{{ url_for('edit_visitor', id=row[0]) }}" title="Edit Record"
+                            class="action-icon-btn btn-edit">
+                            <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a href="{{ url_for('delete_visitor', id=row[0]) }}" title="Delete Record" class="action-icon-btn btn-delete"
-                           onclick="return confirm('Please confirm you want to permanently delete this visitor record.')">
-                           <i class="bi bi-trash"></i>
+                        <a href="{{ url_for('delete_visitor', id=row[0]) }}" title="Delete Record"
+                            class="action-icon-btn btn-delete"
+                            onclick="return confirm('Please confirm you want to permanently delete this visitor record.')">
+                            <i class="bi bi-trash"></i>
                         </a>
                     </td>
                 </tr>
-              {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
-        
+
         <!-- Empty State Message -->
         <div class="empty-state" id="emptyState">
             <div class="empty-icon"><i class="bi bi-inbox"></i></div>
@@ -376,7 +389,7 @@
             else if (course === 'Management') { bg = '#fffbeb'; color = '#d97706'; border = '#fde68a'; }
             else if (course === 'Law') { bg = '#fef2f2'; color = '#dc2626'; border = '#fecaca'; }
             else { bg = '#f8fafc'; color = '#475569'; border = '#e2e8f0'; }
-            
+
             badge.style.background = bg;
             badge.style.color = color;
             badge.style.border = `1px solid ${border}`;
@@ -412,7 +425,7 @@
                 row.style.display = "none";
             }
         });
-        
+
         // Handle empty state
         if (visibleCount === 0) {
             visitorTable.style.display = "none";
